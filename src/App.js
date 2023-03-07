@@ -19,10 +19,10 @@ const imgs = [
 
 const nodeOptions = [
   50, 100, 200, 300, 400, 500, 600, 700, 750, 800, 850, 900, 950, 1000, 1050,
-  1100, 1150, 1200, 1250, 1300,
+  1100, 1150, 1200, 1250, 1300, 3000, 4000, 5000, 7500, 10000,
 ];
 
-function genRandomTree(N = 300) {
+function genRandomTree(N = 300, L = 50) {
   const images = [];
   for (let index = 0; index < N; index++) {
     const random = Math.floor(Math.random() * imgs.length);
@@ -30,7 +30,7 @@ function genRandomTree(N = 300) {
   }
   return {
     nodes: images.map((img, id) => ({ id, img })),
-    links: [...Array(images.length).keys()]
+    links: [...Array(parseInt(L)).keys()]
       .filter((id) => id)
       .map((id) => ({
         source: id,
@@ -38,22 +38,39 @@ function genRandomTree(N = 300) {
       })),
   };
 }
+
 export default function Home() {
   const [node, setNode] = useState(50);
-  const data = genRandomTree(node);
+  const [line, setLine] = useState(50);
+  const data = genRandomTree(node, line);
   const fgRef = useRef();
-
   return (
     <div className="container">
       <FpsView width={150} height={0} left={20} top={20} />
       <form className="form-graph">
-        <select onChange={(e) => setNode(e.target.value)}>
-          {nodeOptions?.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
+        <div className="field">
+          <p>Node</p>
+          <select onChange={(e) => setNode(e.target.value)}>
+            {nodeOptions?.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <p>Line</p>
+          <select onChange={(e) => setLine(e.target.value)}>
+            {nodeOptions?.map(
+              (item) =>
+                item <= node && (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                )
+            )}
+          </select>
+        </div>
       </form>
       <ForceGraph3D
         ref={fgRef}
