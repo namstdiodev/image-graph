@@ -3,20 +3,9 @@ import { ForceGraph3D } from "react-force-graph";
 import * as THREE from "three";
 import { FpsView } from "react-fps";
 
-const imgs = [
-  "cat.jpg",
-  "dog.jpg",
-  "eagle.jpg",
-  "elephant.jpg",
-  "grasshopper.jpg",
-  "octopus.jpg",
-  "owl.jpg",
-  "panda.jpg",
-  "squirrel.jpg",
-  "tiger.jpg",
-  "whale.jpg",
-];
-
+const imgs = Array.from(Array(19).keys()).map(
+  (item) => `human_${item + 1}.jpg`
+);
 const nodeOptions = [
   50, 100, 200, 300, 400, 500, 600, 700, 750, 800, 850, 900, 950, 1000, 1050,
   1100, 1150, 1200, 1250, 1300, 3000, 4000, 5000, 7500, 10000,
@@ -42,6 +31,8 @@ function genRandomTree(N = 300, L = 50) {
 export default function Home() {
   const [node, setNode] = useState(50);
   const [line, setLine] = useState(50);
+  const [lineColor, setLineColor] = useState("black");
+  const [lineWidth, setLineWidth] = useState(1)
   const data = genRandomTree(node, line);
   const fgRef = useRef();
   return (
@@ -71,10 +62,29 @@ export default function Home() {
             )}
           </select>
         </div>
+        <div>
+          <p>Line Color</p>
+          <input
+            value={lineColor}
+            onChange={(e) => setLineColor(e.target.value)}
+            type="color"
+          />
+        </div>
+        <div>
+          <p>Line Width</p>
+          <input
+            value={lineWidth}
+            onChange={(e) => setLineWidth(Math.abs(e.target.value))}
+            type="number"
+          />
+        </div>
       </form>
       <ForceGraph3D
         ref={fgRef}
+        backgroundColor="#fff"
+        linkColor={() => lineColor}
         graphData={data}
+        linkWidth={parseInt(lineWidth)}
         nodeThreeObject={({ img }) => {
           const imgTexture = new THREE.TextureLoader().load(`imgs/${img}`);
           const material = new THREE.SpriteMaterial({ map: imgTexture });
