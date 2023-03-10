@@ -6,10 +6,7 @@ import { FpsView } from "react-fps";
 const imgs = Array.from(Array(19).keys()).map(
   (item) => `human_${item + 1}.jpg`
 );
-const nodeOptions = [
-  50, 100, 200, 300, 400, 500, 600, 700, 750, 800, 850, 900, 950, 1000, 1050,
-  1100, 1150, 1200, 1250, 1300, 3000, 4000, 5000, 7500, 10000,
-];
+const nodeOptions = [50, 1000, 2000, 3000, 4000, 5000, 6000, 7000];
 
 function genRandomTree(N = 300, L = 50) {
   const images = [];
@@ -32,7 +29,7 @@ export default function Home() {
   const [node, setNode] = useState(50);
   const [line, setLine] = useState(50);
   const [lineColor, setLineColor] = useState("black");
-  const [lineWidth, setLineWidth] = useState(1)
+  const [lineWidth, setLineWidth] = useState(1);
   const data = genRandomTree(node, line);
   const fgRef = useRef();
   return (
